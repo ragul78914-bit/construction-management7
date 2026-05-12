@@ -1,0 +1,13 @@
+{
+  "name": "monex-project",
+  "version": "1.0.0",
+  "description": "Root project for Monex",
+  "scripts": {
+    "dev:frontend": "npm run dev --prefix monex",
+    "dev:backend": "npm run dev --prefix monex/backend",
+    "dev": "npx concurrently \"npm run dev --prefix monex\" \"npm run dev --prefix monex/backend\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
