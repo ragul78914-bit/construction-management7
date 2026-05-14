@@ -59,8 +59,8 @@ export default function DashboardLayout({ children }) {
   if (!mounted) return null;
 
   const q = searchQuery.toLowerCase();
-  const filteredSites = sites.filter(s => s.name?.toLowerCase().includes(q));
-  const filteredUsers = users.filter(u => u.name?.toLowerCase().includes(q));
+  const filteredSites = (sites || []).filter(s => s.name?.toLowerCase().includes(q));
+  const filteredUsers = (users || []).filter(u => u.name?.toLowerCase().includes(q));
 
   const toggleTheme = () => { document.body.classList.toggle('dark-theme'); setIsDark(d => !d); };
   const toggleLanguage = () => { const next = language === 'en' ? 'ta' : 'en'; setLanguage(next); i18n.changeLanguage(next); };

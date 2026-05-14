@@ -7,7 +7,7 @@ export { WorkerMessages } from '@/components/pages/Worker/WorkerMessages';
 
 export function WorkerDashboard() {
   const { currentUser, sites } = useStore();
-  const assignedSite = sites.find(s => s.id === currentUser?.assignedSite);
+  const assignedSite = (sites || []).find(s => s.id === currentUser?.assignedSite);
 
   return (
     <div>
@@ -68,9 +68,9 @@ export function WorkerTasks() {
 
 export function WorkerAttendance() {
   const { currentUser, attendanceEntries, sites, users, addAttendance } = useStore();
-  const myEntries = attendanceEntries.filter(a => a.workerId === currentUser?.id);
-  const site = sites.find(s => s.id === currentUser?.assignedSite);
-  const supervisor = users.find(u => u.id === site?.supervisorId);
+  const myEntries = (attendanceEntries || []).filter(a => a.workerId === currentUser?.id);
+  const site = (sites || []).find(s => s.id === currentUser?.assignedSite);
+  const supervisor = (users || []).find(u => u.id === site?.supervisorId);
   const todayStr = new Date().toISOString().split('T')[0];
   const todayEntry = myEntries.find(a => a.date === todayStr);
   const currentMonth = todayStr.slice(0, 7);

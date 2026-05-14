@@ -506,7 +506,7 @@ const useStore = create(
   }),
   {
     name: 'monex-storage',
-    storage: createJSONStorage(() => localStorage),
+    storage: createJSONStorage(() => typeof window !== 'undefined' ? window.localStorage : null),
     // Only persist these fields
     partialize: (state) => ({
       users: state.users,
