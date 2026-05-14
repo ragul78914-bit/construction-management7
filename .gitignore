@@ -1,0 +1,9 @@
+# Ignore environment variables
+.env
+.env.*
+
+# Node modules
+node_modules/
+
+# Mac OS
+.DS_Store
