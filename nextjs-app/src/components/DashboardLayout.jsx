@@ -49,8 +49,14 @@ export default function DashboardLayout({ children }) {
   const [notifOpen, setNotifOpen] = useState(false);
   const notifRef = useRef(null);
   const ripple = useRipple();
+  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => { initializeData(); }, [initializeData]);
+  useEffect(() => {
+    setMounted(true);
+    initializeData();
+  }, [initializeData]);
+
+  if (!mounted) return null;
 
   const q = searchQuery.toLowerCase();
   const filteredSites = sites.filter(s => s.name?.toLowerCase().includes(q));

@@ -16,10 +16,12 @@ export default function LoginPage() {
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const loginWithCredentials = useStore((state) => state.loginWithCredentials);
+  const initializeData = useStore((state) => state.initializeData);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    initializeData();
+  }, [initializeData]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
