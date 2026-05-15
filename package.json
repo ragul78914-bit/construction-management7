@@ -1,13 +1,21 @@
 {
-  "name": "monex-project",
-  "version": "1.0.0",
-  "description": "Root project for Monex",
+  "name": "monex",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "dev:frontend": "npm run dev --prefix monex",
-    "dev:backend": "npm run dev --prefix monex/backend",
-    "dev": "npx concurrently \"npm run dev --prefix monex\" \"npm run dev --prefix monex/backend\""
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
   },
-  "devDependencies": {
-    "concurrently": "^8.2.2"
+  "dependencies": {
+    "firebase": "^12.13.0",
+    "framer-motion": "^12.38.0",
+    "i18next": "^26.0.10",
+    "lucide-react": "^1.14.0",
+    "next": "16.2.6",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-i18next": "^17.0.7",
+    "zustand": "^5.0.13"
   }
 }
