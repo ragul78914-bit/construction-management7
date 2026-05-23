@@ -65,7 +65,12 @@ const useStore = create(
     // Listen to Users
     onSnapshot(collection(db, "users"), (snapshot) => {
       const dbUsers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      set({ users: dbUsers.length > 0 ? dbUsers : [initialAdmin] });
+      // Always ensure initialAdmin exists — merge it if Firebase doesn't have an Admin
+      const hasAdmin = dbUsers.some(u => u.role === 'Admin');
+      const mergedUsers = dbUsers.length > 0
+        ? (hasAdmin ? dbUsers : [initialAdmin, ...dbUsers])
+        : [initialAdmin];
+      set({ users: mergedUsers });
     });
 
     // Listen to Sites
@@ -112,42 +117,46 @@ const useStore = create(
   },
 
   // --- Auth Actions ---
-  loginWithCredentials: (identifier, password, role) => {
+  // Login by email/password ONLY — role is auto-detected from DB
+  loginWithCredentials: (identifier, password) => {
     const { users } = get();
-    let foundUser = null;
-    
-    foundUser = users.find(u => 
-      (u.email === identifier || u.phone === identifier) && 
-      u.password === password && 
-      u.role === role
+
+    // Debug: log what users are currently in the store
+    console.log('[Login] Attempting login for:', identifier);
+    console.log('[Login] Total users in store:', users.length);
+    console.log('[Login] Users:', users.map(u => ({ email: u.email, phone: u.phone, role: u.role, hasPassword: !!u.password })));
+
+    // Always check initialAdmin as a hard fallback (in case Firebase wiped it)
+    const allUsers = users.some(u => u.role === 'Admin')
+      ? users
+      : [initialAdmin, ...users];
+
+    // Find user by email or phone + password only
+    const matchedUser = allUsers.find(u =>
+      (u.email === identifier || u.phone === identifier) &&
+      u.password === password
     );
 
-    // If no exact match, check if this is an Admin trying to log into another panel
-    if (!foundUser) {
-      const adminUser = users.find(u => 
-        (u.email === identifier || u.phone === identifier) && 
-        u.password === password && 
-        u.role === 'Admin'
-      );
-      if (adminUser) {
-        // Let the Admin log in as the requested role (impersonation/testing)
-        foundUser = { ...adminUser, role: role };
-      }
+    if (!matchedUser) {
+      console.log('[Login] No matching user found.');
+      return { success: false, error: 'Invalid email or password. Please try again.' };
     }
 
-    if (foundUser) {
-      if (foundUser.role !== 'Admin' && foundUser.status === 'Inactive') {
-        return { success: false, error: 'Account is inactive.' };
-      }
-      set({ 
-        currentUser: foundUser, 
-        isAuthenticated: true,
-        otpVerificationPending: false,
-        pendingUserLogin: null
-      });
-      return { success: true };
+    console.log('[Login] Matched user:', matchedUser.email, '| Role:', matchedUser.role);
+
+    // Check if the account is inactive
+    if (matchedUser.status === 'Inactive') {
+      return { success: false, error: 'Account is inactive. Please contact admin.' };
     }
-    return { success: false, error: 'Invalid email/phone number or password' };
+
+    // Set currentUser with the real role from DB
+    set({ 
+      currentUser: matchedUser,
+      isAuthenticated: true,
+      otpVerificationPending: false,
+      pendingUserLogin: null
+    });
+    return { success: true, role: matchedUser.role };
   },
 
   verifyOTP: (otp) => {

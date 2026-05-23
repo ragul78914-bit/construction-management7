@@ -16,13 +16,18 @@ export default function AuthGuard({ children, role }) {
     if (!mounted) return;
     if (!isAuthenticated || !currentUser) {
       router.replace('/login');
-    } else if (role && currentUser.role !== role) {
-      router.replace('/');
+      return;
+    }
+    // Role check: Admin can access any panel.
+    // Other roles can only access their own panel.
+    if (role && currentUser.role !== 'Admin' && currentUser.role !== role) {
+      router.replace('/login');
     }
   }, [isAuthenticated, currentUser, role, router, mounted]);
 
   if (!mounted || !isAuthenticated || !currentUser) return null;
-  if (role && currentUser.role !== role) return null;
+  // Block non-admin users from accessing wrong panel
+  if (role && currentUser.role !== 'Admin' && currentUser.role !== role) return null;
 
   return children;
 }

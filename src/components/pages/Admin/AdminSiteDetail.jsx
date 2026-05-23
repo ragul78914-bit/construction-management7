@@ -446,31 +446,31 @@ export function AdminSiteDetail() {
                  <label className="form-label mb-2 flex items-center gap-2"><ImageIcon size={16}/> Upload New Client Document</label>
                  <input type="file" multiple className="form-input" onChange={async (e) => {
                    const files = Array.from(e.target.files);
-                   const { storage } = await import('@/lib/firebase');
-                   const { ref, uploadString, getDownloadURL } = await import('firebase/storage');
+                   if (files.length === 0) return;
                    
-                   const valid = await Promise.all(files.map(async f => {
-                     const base64 = await fileToBase64(f);
-                     const id = `doc_${Date.now()}_${Math.random()}`;
-                     
-                     const storageRef = ref(storage, `sites/${site.id}/client_documents/${id}_${f.name}`);
-                     await uploadString(storageRef, base64, 'data_url');
-                     const downloadURL = await getDownloadURL(storageRef);
+                   try {
+                     const valid = await Promise.all(files.map(async f => {
+                       const base64 = await fileToBase64(f);
+                       const id = `doc_${Date.now()}_${Math.random()}`;
 
-                     return {
-                       id,
-                       fileName: f.name,
-                       fileType: f.type,
-                       uploadDate: new Date().toISOString(),
-                       uploadedBy: 'Admin',
-                       content: downloadURL
+                       return {
+                         id,
+                         fileName: f.name,
+                         fileType: f.type,
+                         uploadDate: new Date().toISOString(),
+                         uploadedBy: 'Admin',
+                         content: base64
+                       };
+                     }));
+                     const updatedClient = {
+                       ...(site.client || {}),
+                       documents: [...(site.client?.documents || []), ...valid]
                      };
-                   }));
-                   const updatedClient = {
-                     ...(site.client || {}),
-                     documents: [...(site.client?.documents || []), ...valid]
-                   };
-                   updateSite(site.id, { client: updatedClient });
+                     updateSite(site.id, { client: updatedClient });
+                   } catch (err) {
+                     console.error(err);
+                     alert("Failed to process document: " + err.message);
+                   }
                  }} />
                </div>
 
