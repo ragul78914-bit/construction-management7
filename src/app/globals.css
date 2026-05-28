@@ -1136,16 +1136,33 @@ body.dark-theme .admin-category-btn {
 
 /* Small Devices (Phones & Small Tablets, up to 768px) */
 @media screen and (max-width: 768px) {
+  body {
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
   .dashboard-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
     gap: 16px;
   }
   .larkon-stats-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
     gap: 16px;
   }
+  .larkon-grid-container {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .form-grid-2 {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  .responsive-image-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
   .main-inner-content {
-    padding: 16px;
+    padding: 16px !important;
   }
   .page-header {
     flex-direction: column;
@@ -1153,66 +1170,100 @@ body.dark-theme .admin-category-btn {
     gap: 10px;
   }
   .topbar {
-    padding: 0 16px;
+    padding: 0 12px;
   }
   .search-bar {
-    width: 180px;
-    padding: 0.4rem 0.8rem;
+    width: 140px;
+    padding: 0.4rem 0.6rem;
   }
   .topbar-title {
     display: none; /* Hide welcome text to save space for icons */
   }
   .topbar-right.gap-3 {
-    gap: 0.5rem !important; /* Reduce space between search and icons */
+    gap: 0.4rem !important; /* Reduce space between search and icons */
   }
   .topbar-icons.gap-2 {
-    gap: 0.25rem !important; /* Reduce space between icons */
+    gap: 0.15rem !important; /* Reduce space between icons */
   }
   .btn-icon {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
   }
   .header-avatar {
-    width: 28px;
-    height: 28px;
-    font-size: 0.8rem;
+    width: 32px;
+    height: 32px;
+    font-size: 0.85rem;
   }
   .notif-dropdown {
-    right: -10px;
-    width: 300px;
-    max-width: 90vw;
+    right: -16px !important;
+    left: auto !important;
+    width: 320px !important;
+    max-width: calc(100vw - 32px) !important;
   }
-  .modal-content {
-    max-width: calc(100% - 32px);
-    margin: 16px;
+  .modal-content, .admin-modal-box, .larkon-modal-content {
+    max-width: calc(100% - 24px) !important;
+    margin: 12px !important;
+    padding: 16px !important;
   }
   .card-body {
-    padding: 1rem;
+    padding: 1rem !important;
   }
   .stat-card-larkon {
-    padding: 1rem;
+    padding: 1rem !important;
   }
   .form-group {
     margin-bottom: 1rem;
   }
-  .form-grid-2 {
-    grid-template-columns: 1fr;
+  /* Scrollable tabs on mobile to prevent overflow/wrapping */
+  .tabs, .admin-msg-tabs, .nav-tabs, .sub-tabs {
+    display: flex !important;
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 6px;
+    margin-bottom: 1rem;
+    gap: 8px !important;
+    border-bottom: 1px solid var(--border-color);
   }
-  /* Mobile Sidebar Toggle Logic */
+  .tabs-item, .admin-msg-tab, .nav-link, .tab {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+  }
+  /* Table responsive scrolling */
+  .table-container {
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+  }
+  .table {
+    min-width: 650px !important;
+    width: 100% !important;
+  }
+  /* Mobile Sidebar Toggle Logic with Hardware Acceleration */
   .sidebar { 
-    transform: translateX(-100%); 
+    transform: translateX(-100%) translateZ(0); 
+    will-change: transform;
+    touch-action: pan-y;
+    z-index: 1000;
   }
   .sidebar.open { 
-    transform: translateX(0); 
+    transform: translateX(0) translateZ(0); 
   }
   .main-content { 
-    margin-left: 0; 
+    margin-left: 0 !important; 
   }
   .mobile-toggle { 
-    display: block; 
+    display: block !important; 
   }
   .hidden-mobile { 
-    display: none; 
+    display: none !important; 
+  }
+  /* Tap Target Sizing */
+  .btn, .form-input, .form-select, .role-pill {
+    min-height: 44px;
   }
 }
 

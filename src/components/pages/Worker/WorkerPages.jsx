@@ -287,9 +287,9 @@ export function WorkerSettings() {
     <div style={{ maxWidth: '700px', margin: '2rem auto' }}>
       <div className="page-header"><h1>Settings & Profile</h1></div>
       
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '1.5rem', borderBottom: '2px solid var(--border-color)', paddingBottom: '0.5rem' }}>
+      <div className="tabs" style={{ display: 'flex', gap: '10px', marginBottom: '1.5rem', borderBottom: '2px solid var(--border-color)', paddingBottom: '0.5rem' }}>
         {['Profile', 'Documents', 'Password'].map(tab => (
-          <button key={tab} onClick={() => setActiveTab(tab)} style={{ background: 'none', border: 'none', padding: '0.5rem 1rem', fontSize: '1rem', fontWeight: activeTab === tab ? 'bold' : 'normal', color: activeTab === tab ? 'var(--primary-color)' : 'var(--text-secondary)', borderBottom: activeTab === tab ? '3px solid var(--primary-color)' : 'none', cursor: 'pointer', marginBottom: '-10px' }}>
+          <button key={tab} className={`tab ${activeTab === tab ? 'active' : ''}`} onClick={() => setActiveTab(tab)} style={{ background: 'none', border: 'none', padding: '0.5rem 1rem', fontSize: '1rem', fontWeight: activeTab === tab ? 'bold' : 'normal', color: activeTab === tab ? 'var(--primary-color)' : 'var(--text-secondary)', borderBottom: activeTab === tab ? '3px solid var(--primary-color)' : 'none', cursor: 'pointer', marginBottom: '-10px' }}>
             {tab}
           </button>
         ))}

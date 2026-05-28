@@ -63,6 +63,17 @@ export default function DashboardLayout({ children }) {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
+  useEffect(() => {
+    if (sidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [sidebarOpen]);
+
   if (!mounted) return null;
 
   const q = searchQuery.toLowerCase();
@@ -166,16 +177,14 @@ export default function DashboardLayout({ children }) {
             </motion.div>
             <span style={{ fontSize: '0.95rem', fontWeight: 800, letterSpacing: '-0.3px' }}>Construction Management</span>
           </motion.div>
-          {sidebarOpen && (
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              className="close-btn"
-              onClick={() => setSidebarOpen(false)}
-              style={{ color: 'rgba(255,255,255,0.8)', background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: 8, width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
-            >
-              <X size={18} />
-            </motion.button>
-          )}
+          <button
+            className="sidebar-close-btn"
+            onClick={() => setSidebarOpen(false)}
+            aria-label="Close sidebar"
+            style={{ color: 'rgba(255,255,255,0.8)', background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: 8, width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+          >
+            <X size={18} />
+          </button>
         </div>
 
         {/* User pill */}

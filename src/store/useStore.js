@@ -1,6 +1,19 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { apiGet, apiPost, apiPut, apiDelete } from '../lib/api';
+import { get, set as idbSet, del } from 'idb-keyval';
+
+const idbStorage = {
+  getItem: async (name) => {
+    return (await get(name)) || null;
+  },
+  setItem: async (name, value) => {
+    await idbSet(name, value);
+  },
+  removeItem: async (name) => {
+    await del(name);
+  },
+};
 
 // Generate initial admin fallback (Keep one admin to ensure login is possible)
 const initialAdmin = {
@@ -16,6 +29,29 @@ const initialSupervisors = [];
 const initialWorkers = [];
 const initialSites = [];
 const initialMaterials = [];
+
+// Clean and migrate old bloated state to prevent QuotaExceededError from Base64 uploads
+if (typeof window !== 'undefined') {
+  try {
+    const raw = window.localStorage.getItem('monex-storage');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed.state && (parsed.state.users || parsed.state.sites || parsed.state.materials)) {
+        console.warn('[STORE] Old bloated localStorage state detected. Migrating to clean state...');
+        const cleanState = {
+          state: {
+            currentUser: parsed.state.currentUser || null,
+            isAuthenticated: parsed.state.isAuthenticated || false
+          },
+          version: parsed.version || 0
+        };
+        window.localStorage.setItem('monex-storage', JSON.stringify(cleanState));
+      }
+    }
+  } catch (e) {
+    console.error('Failed to migrate or clear old localStorage:', e);
+  }
+}
 
 const useStore = create(
   persist(
@@ -594,17 +630,9 @@ const useStore = create(
     }),
     {
       name: 'monex-storage',
-      storage: createJSONStorage(() => typeof window !== 'undefined' ? window.localStorage : null),
-      // Only persist these fields
+      storage: createJSONStorage(() => typeof window !== 'undefined' ? idbStorage : null),
+      // Only persist authentication fields to avoid storing heavy base64 strings in localStorage
       partialize: (state) => ({
-        users: state.users,
-        sites: state.sites,
-        materials: state.materials,
-        spendRecords: state.spendRecords,
-        wageEntries: state.wageEntries,
-        attendanceEntries: state.attendanceEntries,
-        progressUpdates: state.progressUpdates,
-        messages: state.messages,
         currentUser: state.currentUser,
         isAuthenticated: state.isAuthenticated
       }),

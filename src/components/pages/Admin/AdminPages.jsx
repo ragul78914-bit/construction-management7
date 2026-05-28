@@ -345,7 +345,7 @@ export function AdminSites() {
           <p style={{ fontWeight:500 }}>No sites found. Add your first site!</p>
         </div>
       ) : (
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))', gap:20 }}>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(270px,1fr))', gap:20 }}>
           {filtered.map((site, idx) => {
             const spend = spendRecords.filter(sp=>sp.siteId===site.id).reduce((s,sp)=>s+sp.amount,0);
             const budget = site.totalBudget || 0;
@@ -521,7 +521,7 @@ export function AdminSites() {
                 </div>
               </div>
 
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16, borderTop:'1px solid var(--border-color)', paddingTop:'1rem', marginTop:'0.5rem', marginBottom:'1rem' }}>
+              <div className="form-grid-2" style={{ borderTop:'1px solid var(--border-color)', paddingTop:'1rem', marginTop:'0.5rem', marginBottom:'1rem' }}>
                 <div className="form-group mb-0">
                   <label className="form-label">Client Name</label>
                   <input type="text" className="form-input" style={{ borderRadius:8 }} placeholder="e.g. Acme Corp"

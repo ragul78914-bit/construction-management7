@@ -199,7 +199,7 @@ export function SupervisorProgress() {
         )}
       </div>
 
-      <div className="dashboard-grid" style={{ gridTemplateColumns: '1fr 2fr', gap: '2rem' }}>
+      <div className="responsive-image-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '2rem' }}>
         <div className="card p-4">
           <h3 className="mb-3">Add Update</h3>
           <form onSubmit={handleSubmit}>

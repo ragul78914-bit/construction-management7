@@ -135,7 +135,7 @@ export function AdminMaterials() {
       </div>
 
       {/* ── Materials Table ── */}
-      <div className="table-container" style={{ borderRadius:12, overflow:'hidden' }}>
+      <div className="table-container" style={{ borderRadius:12 }}>
         <div style={{ padding:'1rem 1.4rem', borderBottom:'1px solid var(--border-color)', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
           <strong style={{ fontSize:'0.95rem' }}>All Materials <span className="text-muted" style={{fontWeight:400}}>({filtered.length})</span></strong>
         </div>

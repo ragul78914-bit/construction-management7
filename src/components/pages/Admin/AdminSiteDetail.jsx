@@ -175,7 +175,7 @@ export function AdminSiteDetail() {
 
       {/* Overview Header */}
       <div className="card mb-4">
-        <div className="dashboard-grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 0 }}>
+        <div className="responsive-image-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0 }}>
           <div style={{ height: '300px', backgroundColor: 'var(--bg-tertiary)', position: 'relative' }}>
              {site.image ? <img src={site.image} alt="Site" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <div className="flex items-center justify-center" style={{ height: '100%' }}><ImageIcon size={48} color="var(--text-secondary)" /></div>}
              <div className="badge badge-primary" style={{ position: 'absolute', top: '1rem', left: '1rem' }}>Site Image</div>
@@ -201,16 +201,16 @@ export function AdminSiteDetail() {
             <div><span className="text-muted">End Date:</span> {site.endDate || 'Not set'}</div>
           </div>
         </div>
-        <div className="card-footer flex justify-between bg-darker">
-          <div className="text-center">
+        <div className="card-footer flex justify-between bg-darker" style={{ flexWrap: 'wrap', gap: '16px' }}>
+          <div className="text-center" style={{ flex: '1 1 100px', minWidth: '100px' }}>
             <div className="text-small text-muted">Advance Amount</div>
             <div style={{ fontSize: '1.25rem', fontWeight: 600 }}>${site.advanceAmount.toLocaleString()}</div>
           </div>
-          <div className="text-center">
+          <div className="text-center" style={{ flex: '1 1 100px', minWidth: '100px' }}>
             <div className="text-small text-muted">Total Spend</div>
             <div style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--danger-color)' }}>${totalSpend.toLocaleString()}</div>
           </div>
-          <div className="text-center">
+          <div className="text-center" style={{ flex: '1 1 100px', minWidth: '100px' }}>
             <div className="text-small text-muted">Remaining Balance</div>
             <div style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--success-color)' }}>${remainingBalance.toLocaleString()}</div>
           </div>
