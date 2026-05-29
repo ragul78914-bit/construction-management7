@@ -14,7 +14,7 @@ export default function SignUpPage() {
   const [mounted, setMounted] = useState(false);
   
   const router = useRouter();
-  const { users, signUp } = useStore();
+  const { users, signUp, currentUser, isAuthenticated, isHydrated } = useStore();
   
   // Check if any Admin exists in the store
   const hasAdmin = users.some(u => u.role === 'Admin');
@@ -25,6 +25,16 @@ export default function SignUpPage() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Redirect if already authenticated once store is hydrated
+  useEffect(() => {
+    if (mounted && isHydrated && isAuthenticated && currentUser) {
+      const userRole = currentUser.role;
+      if (userRole === 'Admin') router.replace('/admin');
+      else if (userRole === 'Supervisor') router.replace('/supervisor');
+      else router.replace('/worker');
+    }
+  }, [mounted, isHydrated, isAuthenticated, currentUser, router]);
 
   // Determine available roles for the signup page.
   // We only allow one Admin in the system (or initial admin creation).
@@ -57,7 +67,13 @@ export default function SignUpPage() {
     }, 800);
   };
 
-  if (!mounted) return null;
+  if (!mounted || !isHydrated) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0f0c29' }}>
+        <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="login-page">

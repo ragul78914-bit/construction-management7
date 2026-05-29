@@ -5,9 +5,10 @@ import useStore from '@/store/useStore';
 
 export default function RootPage() {
   const router = useRouter();
-  const { currentUser, isAuthenticated } = useStore();
+  const { currentUser, isAuthenticated, isHydrated } = useStore();
 
   useEffect(() => {
+    if (!isHydrated) return;
     if (!isAuthenticated || !currentUser) {
       router.replace('/login');
     } else if (currentUser.role === 'Admin') {
@@ -19,7 +20,7 @@ export default function RootPage() {
     } else {
       router.replace('/login');
     }
-  }, [isAuthenticated, currentUser, router]);
+  }, [isAuthenticated, currentUser, router, isHydrated]);
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0f0c29' }}>

@@ -5,7 +5,7 @@ import useStore from '@/store/useStore';
 
 export default function AuthGuard({ children, role }) {
   const router = useRouter();
-  const { currentUser, isAuthenticated } = useStore();
+  const { currentUser, isAuthenticated, isHydrated } = useStore();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -13,15 +13,23 @@ export default function AuthGuard({ children, role }) {
   }, []);
 
   useEffect(() => {
-    if (!mounted) return;
+    if (!mounted || !isHydrated) return;
     if (!isAuthenticated || !currentUser) {
       router.replace('/login');
     } else if (role && currentUser.role !== role) {
       router.replace('/');
     }
-  }, [isAuthenticated, currentUser, role, router, mounted]);
+  }, [isAuthenticated, currentUser, role, router, mounted, isHydrated]);
 
-  if (!mounted || !isAuthenticated || !currentUser) return null;
+  if (!mounted || !isHydrated) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0f0c29' }}>
+        <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>Loading...</div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated || !currentUser) return null;
   if (role && currentUser.role !== role) return null;
 
   return children;

@@ -15,13 +15,23 @@ export default function LoginPage() {
   const [success, setSuccess] = useState(false);
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
-  const loginWithCredentials = useStore((state) => state.loginWithCredentials);
-  const initializeData = useStore((state) => state.initializeData);
+  
+  const { currentUser, isAuthenticated, isHydrated, loginWithCredentials, initializeData } = useStore();
 
   useEffect(() => {
     setMounted(true);
     initializeData();
   }, [initializeData]);
+
+  // Redirect if already authenticated once store is hydrated
+  useEffect(() => {
+    if (mounted && isHydrated && isAuthenticated && currentUser) {
+      const userRole = currentUser.role;
+      if (userRole === 'Admin') router.replace('/admin');
+      else if (userRole === 'Supervisor') router.replace('/supervisor');
+      else router.replace('/worker');
+    }
+  }, [mounted, isHydrated, isAuthenticated, currentUser, router]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -44,7 +54,13 @@ export default function LoginPage() {
     }, 800);
   };
 
-  if (!mounted) return null;
+  if (!mounted || !isHydrated) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0f0c29' }}>
+        <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="login-page">

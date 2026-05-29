@@ -59,6 +59,7 @@ const useStore = create(
       // Auth state
       currentUser: null,
       isAuthenticated: false,
+      isHydrated: false,
       otpVerificationPending: false,
       pendingUserLogin: null, // Holds user info before OTP is verified
 
@@ -636,6 +637,11 @@ const useStore = create(
         currentUser: state.currentUser,
         isAuthenticated: state.isAuthenticated
       }),
+      onRehydrateStorage: () => (state, error) => {
+        if (!error && state) {
+          useStore.setState({ isHydrated: true });
+        }
+      }
     }
   )
 );

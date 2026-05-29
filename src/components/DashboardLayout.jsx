@@ -74,6 +74,29 @@ export default function DashboardLayout({ children }) {
     };
   }, [sidebarOpen]);
 
+  useEffect(() => {
+    const checkModal = () => {
+      const modalActive = document.querySelector('.modal-overlay, .admin-modal-overlay, .larkon-modal-overlay, .mat-modal-overlay') !== null;
+      if (modalActive) {
+        document.body.classList.add('modal-open');
+      } else {
+        document.body.classList.remove('modal-open');
+      }
+    };
+
+    checkModal();
+
+    const observer = new MutationObserver(() => {
+      checkModal();
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+      document.body.classList.remove('modal-open');
+    };
+  }, []);
+
   if (!mounted) return null;
 
   const q = searchQuery.toLowerCase();

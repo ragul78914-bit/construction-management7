@@ -55,6 +55,32 @@
   box-sizing: border-box;
 }
 
+img {
+  max-width: 100%;
+}
+
+.container {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+body.modal-open {
+  overflow: hidden !important;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
 body {
   font-family: var(--font-family);
   min-height: 100vh;
@@ -554,30 +580,39 @@ img { max-width: 100%; height: auto; display: block; }
 .tab.active { color: var(--primary-color); border-bottom-color: var(--primary-color); background-color: transparent; }
 
 /* Modal */
-.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(33, 37, 41, 0.5); display: flex; align-items: flex-start; justify-content: center; z-index: 1050; padding: 2rem 1rem; overflow-y: auto; }
-.modal-content { margin: auto; background-color: var(--bg-secondary); border-radius: var(--border-radius-md); width: 100%; max-width: 500px; max-height: none; box-shadow: var(--shadow-lg); }
-
-/* ── Admin/Supervisor scrollable modal ── */
-.admin-modal-overlay {
-  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background-color: rgba(33, 37, 41, 0.5);
-  display: flex; align-items: flex-start; justify-content: center;
-  z-index: 1050;
-  padding: 1.5rem 1rem;
-  overflow-y: auto;
-  backdrop-filter: blur(5px);
+/* Center all popup modals vertically and horizontally on all devices */
+.modal-overlay,
+.admin-modal-overlay,
+.larkon-modal-overlay,
+.mat-modal-overlay {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 1050 !important;
+  padding: 1rem !important;
+  overflow: hidden !important;
 }
-.admin-modal-box {
-  margin: auto;
+
+.modal-content,
+.admin-modal-box,
+.larkon-modal-content,
+.mat-modal-box,
+.modal {
   background-color: var(--bg-secondary);
-  border-radius: 14px;
+  border-radius: var(--border-radius-md);
   width: 100%;
-  max-width: 520px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.18);
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - 3rem);
-  overflow: hidden;
 }
 @media (max-width: 640px) {
   .admin-modal-overlay {
@@ -1136,6 +1171,13 @@ body.dark-theme .admin-category-btn {
 
 /* Small Devices (Phones & Small Tablets, up to 768px) */
 @media screen and (max-width: 768px) {
+  html, body, .app-container, .main-content, .main-inner-content, .topbar {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  html, body, .app-container, .main-content {
+    overflow-x: hidden !important;
+  }
   body {
     padding-left: env(safe-area-inset-left, 0px);
     padding-right: env(safe-area-inset-right, 0px);
@@ -1200,10 +1242,18 @@ body.dark-theme .admin-category-btn {
     width: 320px !important;
     max-width: calc(100vw - 32px) !important;
   }
-  .modal-content, .admin-modal-box, .larkon-modal-content {
-    max-width: calc(100% - 24px) !important;
-    margin: 12px !important;
-    padding: 16px !important;
+  .modal-content,
+  .admin-modal-box,
+  .larkon-modal-content,
+  .mat-modal-box,
+  .modal {
+    width: 95% !important;
+    max-width: 500px !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    border-radius: 20px !important;
+    margin: auto !important;
   }
   .card-body {
     padding: 1rem !important;
@@ -1265,10 +1315,21 @@ body.dark-theme .admin-category-btn {
   .btn, .form-input, .form-select, .role-pill {
     min-height: 44px;
   }
+  input, select, textarea {
+    padding: 0.75rem 1rem !important;
+    font-size: 16px !important;
+  }
 }
 
 /* Medium Devices (Tablets, 769px to 992px) */
 @media screen and (min-width: 769px) and (max-width: 992px) {
+  html, body, .app-container, .main-content, .main-inner-content, .topbar {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  html, body, .app-container, .main-content {
+    overflow-x: hidden !important;
+  }
   .dashboard-grid {
     grid-template-columns: repeat(2, 1fr);
   }

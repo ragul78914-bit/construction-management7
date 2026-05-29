@@ -195,10 +195,10 @@ export function AdminContactDetails() {
 
             {/* Scrollable Body */}
             <div style={{ overflowY: 'auto', flex: 1 }}>
-              <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1.6fr)', gap: 0 }}>
+              <div className="contact-detail-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1.6fr)', gap: 0 }}>
 
                 {/* Left: Info */}
-                <div style={{ padding: '1.5rem', borderRight: '1px solid var(--border-color)' }}>
+                <div className="contact-detail-info" style={{ padding: '1.5rem' }}>
                   <h3 style={{ margin: '0 0 1rem', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-tertiary)', fontWeight: 700 }}>Profile Info</h3>
                   {[
                     { icon: <Shield size={14} />, label: 'Role', val: activeUser.role },
@@ -326,8 +326,12 @@ export function AdminContactDetails() {
       <style>{`
         @keyframes pageFadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
         @keyframes modalSlideUp { from{opacity:0;transform:translateY(30px) scale(0.97)} to{opacity:1;transform:none} }
+        .contact-detail-info {
+          border-right: 1px solid var(--border-color);
+        }
         @media (max-width: 600px) {
           .contact-detail-grid { grid-template-columns: 1fr !important; }
+          .contact-detail-info { border-right: none !important; border-bottom: 1px solid var(--border-color) !important; }
         }
       `}</style>
     </div>
